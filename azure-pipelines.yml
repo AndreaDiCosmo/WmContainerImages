@@ -11,22 +11,13 @@ pool:
   vmImage: Canonical:0001-com-ubuntu-confidential-vm-focal:20_04-lts-gen2:latest
 
 steps:
-
+# grant execution permssions
 - script: chmod u+x ${BUILD_SOURCESDIRECTORY}/scripts/*.sh
   displayName: "Grant shell execution permissions"
 
 # get SUIF
 - script: ${BUILD_SOURCESDIRECTORY}/scripts/getSUIF.sh
   displayName: 'Get SUIF'
-
-# update ubuntu machine
-- script: ${BUILD_SOURCESDIRECTORY}/scripts/prepareMachine.sh
-  displayName: 'System software preparation'
-
-- script: |
-    echo Dumping environment
-    env | sort
-  displayName: 'Inspect environment'
 
 # get SA share secrets
 - task: DownloadSecureFile@1
