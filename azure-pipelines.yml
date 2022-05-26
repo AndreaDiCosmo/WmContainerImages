@@ -30,11 +30,12 @@ steps:
 - script: ${BUILD_SOURCESDIRECTORY}/scripts/mountImagesShare.sh
   displayName: 'Mount images share'
 
+# check share
 - script: |
-    echo "Contest of the share"
+    echo "Contenst of the share"
     . ${BUILD_SOURCESDIRECTORY}/scripts/setEnv.sh
     ls -lrt $MY_sd
-  displayName: 'Check share'
+  displayName: 'Check Share'
 
 # Assure binary installatiom files
 - script: ${BUILD_SOURCESDIRECTORY}/scripts/assureInstallBinaries.sh 
@@ -50,6 +51,10 @@ steps:
   displayName: 'Download MSR license'
   inputs:
     secureFile: 'msr-license.xml'
+
+# Install MSR
+- script: ${BUILD_SOURCESDIRECTORY}/scripts/installLeanMSR.sh
+  displayName: 'Install MSR'
 
 # Save audit on share 
 # HINT: ou should use this step only for debug purposes
