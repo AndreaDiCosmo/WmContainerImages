@@ -1,0 +1,51 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  name: WmDevOpsAgentPool
+  vmImage: Canonical:0001-com-ubuntu-confidential-vm-focal:20_04-lts-gen2:latest
+
+steps:
+
+- script: chmod u+x ${BUILD_SOURCESDIRECTORY}/scripts/*.sh
+  displayName: "Grant shell execution permissions"
+
+# get SUIF
+- script: ${BUILD_SOURCESDIRECTORY}/scripts/getSUIF.sh
+  displayName: 'Get SUIF'
+
+# update ubuntu machine
+- script: ${BUILD_SOURCESDIRECTORY}/scripts/prepareMachine.sh
+  displayName: 'System software preparation'
+
+- script: |
+    echo Dumping environment
+    env | sort
+  displayName: 'Inspect environment'
+
+# get SA share secrets
+- task: DownloadSecureFile@1
+  name: SASecureInfo
+  displayName: 'Download secure information for images share'
+  inputs:
+    secureFile: 'SA.secrets.sh'
+
+# mount SA share
+- script: ${BUILD_SOURCESDIRECTORY}/scripts/mountImagesShare.sh
+  displayName: 'Mount images share'
+
+- script: |
+    echo "Contest of the share"
+    . ${BUILD_SOURCESDIRECTORY}/scripts/setEnv.sh
+    ls -lrt $MY_sd
+  displayName: 'Check'
+
+# umount SA share
+- script: ${BUILD_SOURCESDIRECTORY}/scripts/unmountShare.sh
+  displayName: 'Unmount images share'
+  condition: always()
