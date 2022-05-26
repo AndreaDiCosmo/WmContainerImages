@@ -36,16 +36,26 @@ steps:
     ls -lrt $MY_sd
   displayName: 'Check share'
 
-# get MSR share secrets
+# Assure binary installatiom files
+- script: ${BUILD_SOURCESDIRECTORY}/scripts/assureInstallBinaries.sh 
+  displayName: 'Get installation binaries'
+
+# Assure image files
+- script: ${BUILD_SOURCESDIRECTORY}/scripts/assureProductImages.sh 
+  displayName: 'Get product images'
+
+# MSR license is required at build time
 - task: DownloadSecureFile@1
-  name: msrlicense
+  name: msrLicense
   displayName: 'Download MSR license'
   inputs:
     secureFile: 'msr-license.xml'
 
-#Save Audit on Share
+# Save audit on share 
+# HINT: ou should use this step only for debug purposes
+# HINT: without this step the mount may be readonly
 - script: ${BUILD_SOURCESDIRECTORY}/scripts/saveAudit.sh
-  displayName: 'Save audit on share'
+  displayName: 'Save Audit on Share'
   condition: always()
 
 # umount SA share
