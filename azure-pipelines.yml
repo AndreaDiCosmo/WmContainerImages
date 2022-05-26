@@ -34,7 +34,19 @@ steps:
     echo "Contest of the share"
     . ${BUILD_SOURCESDIRECTORY}/scripts/setEnv.sh
     ls -lrt $MY_sd
-  displayName: 'Check'
+  displayName: 'Check share'
+
+# get MSR share secrets
+- task: DownloadSecureFile@1
+  name: msrlicense
+  displayName: 'Download MSR license'
+  inputs:
+    secureFile: 'msr-license.xml'
+
+#Save Audit on Share
+- script: ${BUILD_SOURCESDIRECTORY}/scripts/saveAudit.sh
+  displayName: 'Save audit on share'
+  condition: always()
 
 # umount SA share
 - script: ${BUILD_SOURCESDIRECTORY}/scripts/unmountShare.sh
