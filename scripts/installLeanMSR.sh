@@ -4,7 +4,8 @@
 . ${SUIF_HOME}/01.scripts/commonFunctions.sh
 . ${SUIF_HOME}/01.scripts/installation/setupFunctions.sh
 
-logI "Greating "
+logI "Greating write permission to all for ${SUIF_INSTALL_INSTALL_DIR}"
+sudo mkdir -p ${SUIF_INSTALL_INSTALL_DIR}
 sudo chmod a+w ${SUIF_INSTALL_INSTALL_DIR}
 
 logI "SUIF env before installation of MSR:"
