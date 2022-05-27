@@ -18,10 +18,6 @@ echo "Sourcing secure information..."
 chmod u+x "${SASECUREINFO_SECUREFILEPATH}"
 . "${SASECUREINFO_SECUREFILEPATH}"
 
-echo "SAFile=${SASECUREINFO_SECUREFILEPATH}"
-cat "${SASECUREINFO_SECUREFILEPATH}"
-env | sort
-
 if [ -z ${SAG_AZ_SA_NAME+x} ]; then
   echo "Secure information has not been sourced correctly"
   exit 2

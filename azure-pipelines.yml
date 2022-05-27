@@ -19,6 +19,10 @@ steps:
 - script: ${BUILD_SOURCESDIRECTORY}/scripts/getSUIF.sh
   displayName: 'Get SUIF'
 
+# update ubuntu machine
+- script: ${BUILD_SOURCESDIRECTORY}/scripts/prepareMachine.sh
+  displayName: 'System software preparation'
+
 # get SA share secrets
 - task: DownloadSecureFile@1
   name: SASecureInfo
@@ -55,6 +59,21 @@ steps:
 # Install MSR
 - script: ${BUILD_SOURCESDIRECTORY}/scripts/installLeanMSR.sh
   displayName: 'Install MSR'
+
+# Containerize Canonical
+- script: ${BUILD_SOURCESDIRECTORY}/scripts/containerizeCanonicalMSR.sh
+  displayName: 'Containerize Canonical MSR'
+
+# Service Principal Credentials
+- task: DownloadSecureFile@1
+  name: SPCredentials
+  displayName: 'Download SP credentials'
+  inputs:
+    secureFile: 'sp.credentials.sh'
+
+# push the image
+- script: ${BUILD_SOURCESDIRECTORY}/scripts/pushMSRImages.sh
+  displayName: 'Push built image(s)'
 
 # Save audit on share 
 # HINT: ou should use this step only for debug purposes
